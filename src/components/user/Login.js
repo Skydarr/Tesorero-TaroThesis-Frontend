@@ -91,7 +91,7 @@ const Login = () => {
             navigate(`/${redirect}`, { replace: true });
         }
         else if (isAuthenticated) {
-            navigate("/admin/products");
+            navigate("/admin/posts");
             notify("Login Successfully")
         }
 

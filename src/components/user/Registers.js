@@ -5,6 +5,7 @@ import { registers, clearErrors } from "../../actions/userActions";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Header from '../layout/Header'
+
 import {
   MDBBtn,
   MDBContainer,
@@ -18,6 +19,7 @@ import {
   MDBCheckbox
 }
 from 'mdb-react-ui-kit';
+import { FormGroup } from "react-bootstrap";
 
 function Register() {
 

@@ -83,10 +83,10 @@ function Sidebar(props) {
                                 size="medium"
                                 color="inherit"
                                 component={Link}
-                                to="/admin/products"
+                                to="/admin/posts"
                             >
                                 <SportsMotorsportsIcon />
-                                <ListItemText sx={{ paddingLeft: 3 }}>Products</ListItemText>
+                                <ListItemText sx={{ paddingLeft: 3 }}>Posts</ListItemText>
                             </IconButton>
                         </ListItemIcon>
                     </ListItemButton>
@@ -98,15 +98,15 @@ function Sidebar(props) {
                                 size="medium"
                                 color="inherit"
                                 component={Link}
-                                to="/services"
+                                to="/diseases"
                             >
                                 <HomeRepairServiceIcon />
-                                <ListItemText sx={{ paddingLeft: 3 }}>Services</ListItemText>
+                                <ListItemText sx={{ paddingLeft: 3 }}>Diseases</ListItemText>
                             </IconButton>
                         </ListItemIcon>
                     </ListItemButton>
                 </ListItem>
-                <ListItem disablePadding>
+                {/* <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon style={iconStyle}>
                             <IconButton
@@ -120,7 +120,7 @@ function Sidebar(props) {
                             </IconButton>
                         </ListItemIcon>
                     </ListItemButton>
-                </ListItem>
+                </ListItem> */}
             </List>
             <Divider />
         </div>
@@ -190,7 +190,7 @@ function Sidebar(props) {
                     {user ? (
                         <Fragment>
 
-                            <Typography>Lap on the Top</Typography>
+                            <Typography>Taro E-Assist</Typography>
                             <Button sx={{ marginLeft: "auto" }} color="inherit" onClick={handleClick}>
                                 <Avatar src={user.avatar && user.avatar.url}
                                     alt={user && user.name} sx={{ width: 56, height: 54, marginLeft: "" }}>
@@ -217,7 +217,7 @@ function Sidebar(props) {
                             <Fragment>
                                 {/* <Typography>Bhie-Cycle</Typography> */}
                                 <Typography component={Link} to="http://localhost:3000/" style={{ textDecoration: 'none' }} variant="h6" color="inherit" href="/" sx={{ fontSize: 24 }}>
-                                    Bhie-Cycle
+                                    Taro E-Assist
                                 </Typography>
                                 <Button sx={{ marginLeft: "auto" }} color="inherit" href="/login">Login</Button>
                                 <Button color="inherit" href="/register">Register</Button>

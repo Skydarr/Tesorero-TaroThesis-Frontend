@@ -40,9 +40,6 @@ import {
     GOOGLE_LOGIN_REQUEST,
     GOOGLE_LOGIN_SUCCESS,
     GOOGLE_LOGIN_FAIL,
-    USER_SALES_REQUEST,
-    USER_SALES_SUCCESS,
-    USER_SALES_FAIL
 } from "../constants/userConstants";
 
 export const loadUser = () => async (dispatch) => {
@@ -380,25 +377,3 @@ export const glogin = (response) => async (dispatch) => {
         });
     }
 };
-
-export const userSales = () => async (dispatch) => {
-    try {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-        }
-        dispatch({ type: USER_SALES_REQUEST })
-        const { data } = await axios.get(`/api/v1/orders/customer-sales`, config)
-        dispatch({
-            type: USER_SALES_SUCCESS,
-            payload: data.customerSales,
-        })
-    } catch (error) {
-        dispatch({
-            type: USER_SALES_FAIL,
-            payload: error.response.data.message
-        })
-    }
-}

@@ -1,23 +1,22 @@
-// import logo from './logo.svg';
 import './App.css';
+import './index.css';
+import "react-toastify/dist/ReactToastify.css";
+
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import store from "./store";
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from "@mui/material/styles";
+import store from "./store";
 
 //Components
 import ProtectedRoute from "./components/route/ProtectedRoute";
 import Home from "./components/Home";
 
 //Components - Layouts 
-import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
-import Register from './components/user/Register';
+import Register from './components/user/Registers';
 
 //Components - User
 import Login from "./components/user/Login";
@@ -31,45 +30,23 @@ import NewPassword from './components/user/NewPassword';
 import UsersList from './components/admin/UsersList';
 import NewUser from './components/admin/NewUser';
 import UpdateUser from './components/admin/UpdateUser'
-import Sidebar from './components/admin/Sidebar'
-import OrdersList from "./components/admin/OrdersList";
-import ProcessOrder from './components/admin/ProcessOrder';
-import Products from './components/admin/Products';
+import Taro from './components/admin/Taro';
 
-//Components - Products 
-import ProductsList from './components/admin/ProductsList';
-import NewProduct from "./components/admin/NewProduct";
-import UpdateProduct from './components/admin/UpdateProduct';
+import PostsList from './components/admin/PostsList';
+import NewPost from "./components/admin/NewPost";
+import UpdatePost from './components/admin/UpdatePost';
 
-//Components - Services
-import ServiceList from './components/admin/ServiceList'
-import NewService from './components/admin/NewService';
-import UpdateService from './components/admin/UpdateService';
+import DiseaseList from './components/admin/DiseasesList'
+import NewDisease from './components/admin/NewDisease';
+import UpdateDisease from './components/admin/UpdateDisease';
 
 //Actions
 import { loadUser } from "./actions/userActions";
 
-//Shopping Cart Product
-import Cart from "./components/cart/Cart";
-import Shipping from "./components/cart/Shipping";
-import ConfirmOrder from "./components/cart/ConfirmOrder";
-import Payment from "./components/cart/Payment";
-import OrderSuccess from "./components/cart/OrderSuccess";
-import ListOrders from "./components/order/ListOrders";
-import OrderDetails from "./components/order/OrderDetails";
-import ShopProduct from './components/ShopProduct';
-import ProductDetails from "./components/product/ProductDetails";
-
-//Shopping Cart Product
-import CartService from "./components/cart-service/CartService";
-import ShippingService from "./components/cart-service/ShippingService";
-import ConfirmOrderService from "./components/cart-service/ConfirmOrderService";
-import PaymentService from "./components/cart-service/PaymentService";
-import OrderSuccessService from "./components/cart-service/OrderSuccessService";
-import ListOrdersService from "./components/order/ListOrders";
-import OrderDetailsService from "./components/order/OrderDetails";
-import ShopService from './components/ShopService';
-import ServiceDetails from "./components/services/ServiceDetails";
+import PostDetails from "./components/post/PostDetails";
+import TaroDiseases from './components/TaroDiseases';
+import DiseaseDetails from "./components/diseases/DiseaseDetails";
+import TaroPosts from './components/TaroPosts';
 
 function App() {
   useEffect(() => {
@@ -77,17 +54,14 @@ function App() {
   }, []);
 
   const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
-  const Laptop = createTheme({
+  const Taro = createTheme({
     typography: {
       fontFamily: 'Montserrat'
     }
   });
   return (
     <div className="App">
-      <ThemeProvider theme={Laptop}>
-        {/* <Header /> */}
-        {/* <Sidebar /> */}
-        {/* <ToastContainer /> */}
+      <ThemeProvider theme={Taro}>
         <Routes>
 
           {/* Routes for users */}
@@ -156,217 +130,84 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/admin/orders"
-            element={
-              <ProtectedRoute isAdmin={true}>
-                <OrdersList />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/order/:id"
-            element={
-              <ProtectedRoute isAdmin={true}>
-                <ProcessOrder />
-              </ProtectedRoute>
-            }
-          />
 
-          {/* Routes for products */}
+          {/* Routes for posts */}
           <Route
-            path="/admin/products"
+            path="/admin/posts"
             element={
               <ProtectedRoute isAdmin={true}>
-                <ProductsList />
+                <PostsList />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/product/new"
+            path="/post/new"
             element={
               <ProtectedRoute isAdmin={true}>
-                <NewProduct />
+                <NewPost />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/update/product/:id"
+            path="/update/post/:id"
             element={
               <ProtectedRoute isAdmin={true}>
-                <UpdateProduct />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Routes for services */}
-          <Route
-            path="/services"
-            element={
-              <ProtectedRoute isAdmin={true}>
-                <ServiceList />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/service/new"
-            element={
-              <ProtectedRoute isAdmin={true}>
-                <NewService />
+                <UpdatePost />
               </ProtectedRoute>
             }
           />
 
           <Route
-            path="/update/service/:id"
+            path="/diseases"
             element={
               <ProtectedRoute isAdmin={true}>
-                <UpdateService />
+                <DiseaseList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/disease/new"
+            element={
+              <ProtectedRoute isAdmin={true}>
+                <NewDisease />
               </ProtectedRoute>
             }
           />
 
-          {/*  Routes for ordering products*/}
-          <Route path="/ShopProduct/product/:id"
+          <Route
+            path="/update/disease/:id"
+            element={
+              <ProtectedRoute isAdmin={true}>
+                <UpdateDisease />
+              </ProtectedRoute>
+            }
+          />
+
+          {/*  Routes for ordering posts*/}
+          <Route path="/TaroPosts/post/:id"
             element={
               <ProtectedRoute>
-                <ProductDetails />
+                <PostDetails />
               </ProtectedRoute>
             }
             exact="true" />
-          <Route path="/ShopProduct" element={<ShopProduct />} exact="true" />
-          <Route path="/Products" element={<Products />} exact="true" />
-          <Route path="/search/:keyword" element={<ShopProduct />} exact="true" />
-          <Route path="/cart"
-            element={
-              <ProtectedRoute>
-                <Cart />
-              </ProtectedRoute>
-            }
-            exact="true" />
-          <Route
-            path="/shipping"
-            element={
-              <ProtectedRoute>
-                <Shipping />
-              </ProtectedRoute>
-            }
-            exact="true"
-          />
-          <Route
-            path="/confirm"
-            element={
-              <ProtectedRoute>
-                <ConfirmOrder />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/TaroPosts" element={<TaroPosts />} exact="true" />
+          <Route path="/Taro" element={<Taro />} exact="true" />
+          <Route path="/search/:keyword" element={<TaroPosts />} exact="true" />
 
-          <Route
-            path="/payment"
+          <Route path="/TaroDiseases/disease/:id"
             element={
               <ProtectedRoute>
-                <Payment />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/success"
-            element={
-              <ProtectedRoute>
-                <OrderSuccess />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orders/me"
-            element={
-              <ProtectedRoute>
-                <ListOrders />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/order/:id"
-            element={
-              <ProtectedRoute>
-                <OrderDetails />
-              </ProtectedRoute>
-            }
-          />
-
-          {/*  Routes for availing services*/}
-          <Route path="/ShopService/service/:id"
-            element={
-              <ProtectedRoute>
-                <ServiceDetails />
+                <DiseaseDetails />
               </ProtectedRoute>
             }
             exact="true" />
 
-          <Route path="/ShopService" element={<ShopService />} exact="true" />
-          {/* <Route path="/search/:keyword" element={<ShopProduct />} exact="true" /> */}
-          <Route path="/cartService"
-            element={
-              <ProtectedRoute>
-                <CartService />
-              </ProtectedRoute>
-            }
-            exact="true" />
-          <Route
-            path="/shippingService"
-            element={
-              <ProtectedRoute>
-                <ShippingService />
-              </ProtectedRoute>
-            }
-            exact="true"
-          />
-          <Route
-            path="/confirmService"
-            element={
-              <ProtectedRoute>
-                <ConfirmOrderService />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/TaroDiseases" element={<TaroDiseases />} exact="true" />
 
-          <Route
-            path="/paymentService"
-            element={
-              <ProtectedRoute>
-                <PaymentService />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/successService"
-            element={
-              <ProtectedRoute>
-                <OrderSuccessService />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/ordersservice/me"
-            element={
-              <ProtectedRoute>
-                <ListOrdersService />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orderservice/:id"
-            element={
-              <ProtectedRoute>
-                <OrderDetailsService />
-              </ProtectedRoute>
-            }
-          />
         </Routes>
         <ToastContainer />
         {!loading && (!isAuthenticated || user.role !== "admin") && <Footer />}
-        {/* </Header> */}
       </ThemeProvider>
     </div>
   );
