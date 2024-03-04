@@ -1,105 +1,142 @@
-import React, { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import axios from "axios";
 import MetaData from "./layout/MetaData";
-import Disease from "./diseases/Disease";
-import Loader from "./layout/Loader";
-import Header from "./layout/Header";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getDiseases } from "../actions/diseaseAction";
-import { Link } from "react-router-dom";
-import Pagination from "react-js-pagination";
-import InfiniteScroll from 'react-infinite-scroll-component';
-import Slider, { createSliderWithTooltip } from "rc-slider";
-import "rc-slider/assets/index.css";
 import { Grid } from "@mui/material";
+import Header from "./layout/Header";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import * as React from "react";
 
-const TaroDiseases = ({ match }) => {
-    const dispatch = useDispatch();
-    // const [price, setPrice] = useState([1, 1000]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const { loading, disease, error, diseaseCount, resPerPage, filteredDiseasesCount } = useSelector((state) => state.disease || {});
+const TaroDiseases = () => {
+  const [disease, setDisease] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [selectedDisease, setSelectedDisease] = React.useState(null);
 
-    let { keyword } = useParams();
+  const handleOpen = (dis) => {
+    setSelectedDisease(dis);
+    setOpen(true);
+  };
 
-    useEffect(() => {
-        dispatch(getDiseases(keyword, currentPage));
-        if (error) {
-            alert.error(error);
-        }
-    }, [dispatch, error, keyword, currentPage]);
+  const handleClose = () => setOpen(false);
 
-    function setCurrentPageNo(pageNumber) {
-        setCurrentPage(pageNumber);
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const getDisease = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}api/v1/diseases`
+      );
+      setDisease(data.disease);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    if (loading || !disease) {
-        return <Loader />;
-    }
+  useEffect(() => {
+    getDisease();
+  }, []);
 
-    let count = diseaseCount;
-    if (keyword) {
-        count = filteredDiseasesCount;
-    }
+  return (
+    <Fragment>
+      <Header />
+      <br />
+      <br />
+      <br />
+      <Grid>
+        <MetaData title={"Learn about Taro Diseases"} />
+        <h1 id="products_heading" style={{ textAlign: "center" }}>
+          <span> Taro Diseases </span>
+        </h1>
+        <section id="services" className="container mt-5"></section>
 
-    console.log(keyword);
+        {disease
+          .reduce((rows, dis, index) => {
+            if (index % 4 === 0) rows.push([]);
+            rows[rows.length - 1].push(dis);
+            return rows;
+          }, [])
+          .map((row, rowIndex) => (
+            <Grid
+              container
+              item
+              key={rowIndex}
+              spacing={2}
+              justifyContent="center"
+            >
+              {row.map((dis) => (
+                <Grid item key={dis.id} xs={12} sm={6} md={3}>
+                  <Card sx={{ maxWidth: 345 }}>
+                    {/* Card content goes here */}
+                    <CardMedia
+                      sx={{ height: 140 }}
+                      image="../images/taro.jpg"
+                      title="green iguana"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {dis.name}
+                      </Typography>
+                      <Typography variant="body" color="text.secondary">
+                        {dis.description}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small" onClick={() => handleOpen(dis)}>
+                        Learn More
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          ))}
 
-    const Serv = disease.slice(0, 3);
-    const [dataSource, setDataSource] = useState(Serv);
-    const [hasMore, setHasMore] = useState(false);
-
-    const fetchMoreData = () => {
-        if (dataSource.length <= disease.length) {
-            setTimeout(() => {
-                setHasMore(true)
-                const newData = disease.slice(0, dataSource.length + 3);
-                setDataSource(newData);
-            }, 500);
-        } else {
-            setHasMore(false);
-        }
-    };
-
-    return (
-        <Fragment>
-            <Header /><br /><br /><br />
-            <Fragment>
-                <InfiniteScroll
-                    dataLength={dataSource.length}
-                    next={fetchMoreData}
-                    hasMore={hasMore}
-                    loader={<p>Loading...</p>}
-                    endMessage={<p>You have reached the end</p>}
-                >
-                    <Grid>
-                        <MetaData title={"Learn about Taro Diseases"} />
-                        <h1 id="products_heading" style={{ textAlign: "center" }}><span> Taro Diseases </span></h1>
-                        <section id="services" className="container mt-5">
-                            {dataSource.map((disease) => (
-                                <Disease key={disease._id} disease={disease} />
-                            ))}
-                        </section>
-                    </Grid>
-                </InfiniteScroll>
-
-                {resPerPage <= count && (
-                    <div className="d-flex justify-content-center mt-5">
-                        <Pagination
-                            activePage={currentPage}
-                            itemsCountPerPage={resPerPage}
-                            totalItemsCount={diseaseCount}
-                            onChange={setCurrentPageNo}
-                            nextPageText={"Next"}
-                            prevPageText={"Prev"}
-                            firstPageText={"First"}
-                            lastPageText={"Last"}
-                            itemClass="page-item"
-                            linkClass="page-link"
-                        />
-                    </div>
-                )}
-            </Fragment>
-        </Fragment>
-    );
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+        >
+          <Fade in={open}>
+            <Box sx={style}>
+              <Typography
+                id="transition-modal-title"
+                variant="h3"
+                component="h2"
+              >
+                {selectedDisease && selectedDisease.name}
+              </Typography>
+              <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+                {selectedDisease && selectedDisease.description}
+              </Typography>
+              <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+                {selectedDisease && selectedDisease.part}
+              </Typography>
+            </Box>
+          </Fade>
+        </Modal>
+      </Grid>
+    </Fragment>
+  );
 };
 
 export default TaroDiseases;
